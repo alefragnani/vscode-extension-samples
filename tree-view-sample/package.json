@@ -5,8 +5,14 @@
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"enableProposedApi": true,
+	"private": true,
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
 	"engines": {
-		"vscode": "^1.52.0"
+		"vscode": "^1.57.0"
 	},
 	"categories": [
 		"Other"
@@ -218,17 +224,17 @@
 		"@types/mkdirp": "^0.5.2",
 		"@types/node": "^12.12.0",
 		"@types/rimraf": "^2.0.2",
-		"@types/vscode": "^1.45.0",
+		"@types/vscode": "^1.52.0",
 		"@typescript-eslint/eslint-plugin": "^4.16.0",
 		"@typescript-eslint/parser": "^4.16.0",
 		"eslint": "^7.21.0",
-		"typescript": "^4.2.2"
+		"typescript": "^4.3.5"
 	},
 	"dependencies": {
-		"jsonc-parser": "^0.4.2",
 		"ftp": "^0.3.10",
+		"jsonc-parser": "^0.4.2",
+		"minimist": "^0.2.1",
 		"mkdirp": "^0.5.1",
-		"rimraf": "^2.6.2",
-		"minimist": "^0.2.1"
+		"rimraf": "^2.6.2"
 	}
 }

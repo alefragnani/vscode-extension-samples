@@ -4,8 +4,14 @@
 	"description": "abc",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
+	"private": true,
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
 	"engines": {
-		"vscode": "^1.47.0"
+		"vscode": "^1.58.0"
 	},
 	"enableProposedApi": true,
 	"categories": [
@@ -29,7 +35,8 @@
 		"onCommand:terminalTest.showPreserveFocus",
 		"onCommand:terminalTest.terminals",
 		"onCommand:terminalTest.updateEnvironment",
-		"onCommand:terminalTest.clearEnvironment"
+		"onCommand:terminalTest.clearEnvironment",
+		"onTerminalProfile:terminalTest.terminal-profile"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -106,7 +113,16 @@
 				"command": "terminalTest.registerTerminalLinkProvider",
 				"title": "Terminal API: Register link provider"
 			}
-		]
+		],
+		"terminal": {
+			"profiles": [
+				{
+					"id": "terminalTest.terminal-profile",
+					"icon": "terminal",
+					"title": "Terminal API Profile"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -116,10 +132,10 @@
 	},
 	"devDependencies": {
 		"@types/node": "^12.12.0",
-		"@types/vscode": "^1.47.0",
+		"@types/vscode": "^1.58.0",
 		"@typescript-eslint/eslint-plugin": "^4.16.0",
 		"@typescript-eslint/parser": "^4.16.0",
 		"eslint": "^7.21.0",
-		"typescript": "^4.2.2"
+		"typescript": "^4.3.5"
 	}
 }
