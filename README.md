@@ -27,6 +27,7 @@ You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/
 - [Hello World Sample](helloworld-sample): The Hello World sample for VS Code. See [Extension Anatomy](https://code.visualstudio.com/api/get-started/extension-anatomy) documentation.
 - [Hello World Minimal Sample](helloworld-minimal-sample): A minimal version of Hello World Sample written in JavaScript.
 - [Hello World Test Sample](helloworld-test-sample): Hello World sample with extension integration test. See [Testing Extensions](https://code.visualstudio.com/api/working-with-extensions/testing-extension) documentation.
+- [Hello World Web Sample](helloworld-web-sample): The Hello World sample for VS Code Web. See the [Web Extensions](https://code.visualstudio.com/api/extension-guides/web-extensions) guide.
 
 ## Samples
 
@@ -60,7 +61,7 @@ You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/
 | [Semantic tokens](https://github.com/Microsoft/vscode-extension-samples/tree/main/semantic-tokens-sample) | [/api/language-extensions/semantic-highlight-guide](https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide) | [languages.registerDocumentSemanticTokensProvider](https://code.visualstudio.com/api/references/vscode-api#languages.registerDocumentSemanticTokensProvider)<br>[vscode.DocumentSemanticTokensProvider](https://code.visualstudio.com/api/references/vscode-api#vscode.DocumentSemanticTokensProvider) |
 <!-- SAMPLES_END -->
 
-### Language Protocol Server Samples
+### Language Server Protocol Samples
 
 <!-- LSP_SAMPLES_BEGIN -->
 | Sample | Guide on VS Code Website | API & Contribution |
