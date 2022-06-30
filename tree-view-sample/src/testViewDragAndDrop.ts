@@ -1,30 +1,13 @@
 import * as vscode from 'vscode';
 
-// TestTreeDataTransferItem is for older versions of VS Code that don't have the most up-to-date tree drag and drop API proposal.
-const TestTreeDataTransferItem = (typeof vscode.TreeDataTransferItem === 'function') ? vscode.TreeDataTransferItem : class MockItem {
-	async asString(): Promise<string> {
-		return 'mock';
-	}
 
-	constructor(_value: any) { /* this is a mock constructor */ }
-};
-
-
-class TestViewObjectTransferItem extends TestTreeDataTransferItem {
-	constructor(private _nodes: Node[]) {
-		super(_nodes);
-	}
-
-	asObject(): Node[] {
-		return this._nodes;
-	}
-}
 
 export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscode.TreeDragAndDropController<Node> {
-	supportedMimeTypes = ['text/treeitems'];
+	dropMimeTypes = ['application/vnd.code.tree.testViewDragAndDrop'];
+	dragMimeTypes = ['text/uri-list'];
 	private _onDidChangeTreeData: vscode.EventEmitter<Node[] | undefined> = new vscode.EventEmitter<Node[] | undefined>();
-	// We want to use an array as the event type, so we use the proposed onDidChangeTreeData2.
-	public onDidChangeTreeData2: vscode.Event<Node[] | undefined> = this._onDidChangeTreeData.event;
+	// We want to use an array as the event type, but the API for this is currently being finalized. Until it's finalized, use any.
+	public onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
 	public tree = {
 		'a': {
 			'aa': {
@@ -74,12 +57,12 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 
 	// Drag and drop controller
 
-	public async handleDrop(sources: vscode.TreeDataTransfer, target: Node): Promise<void> {
-		const transferItem = sources.get('text/treeitems');
-		if (!transferItem || !(transferItem instanceof TestViewObjectTransferItem)) {
+	public async handleDrop(target: Node | undefined, sources: vscode.DataTransfer, token: vscode.CancellationToken): Promise<void> {
+		const transferItem = sources.get('application/vnd.code.tree.testViewDragAndDrop');
+		if (!transferItem) {
 			return;
 		}
-		const treeItems = transferItem.asObject();
+		const treeItems: Node[] = transferItem.value;
 		let roots = this._getLocalRoots(treeItems);
 		// Remove nodes that are already target's parent nodes
 		roots = roots.filter(r => !this._isChild(this._getTreeElement(r.key), target));
@@ -91,13 +74,16 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 		}
 	}
 
-	public async handleDrag(source: Node[], treeDataTransfer: vscode.TreeDataTransfer): Promise<void> {
-		treeDataTransfer.set('text/treeitems', new TestViewObjectTransferItem(source));
+	public async handleDrag(source: Node[], treeDataTransfer: vscode.DataTransfer, token: vscode.CancellationToken): Promise<void> {
+		treeDataTransfer.set('application/vnd.code.tree.testViewDragAndDrop', new vscode.DataTransferItem(source));
 	}
 
 	// Helper methods
 
-	_isChild(node: Node, child: Node): boolean {
+	_isChild(node: Node, child: Node | undefined): boolean {
+		if (!child) {
+			return false;
+		}
 		for (const prop in node) {
 			if (prop === child.key) {
 				return true;
@@ -129,12 +115,12 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 	}
 
 	// Remove node from current position and add node to new target element
-	_reparentNode(node: Node, target: Node): void {
+	_reparentNode(node: Node, target: Node | undefined): void {
 		const element = {};
 		element[node.key] = this._getTreeElement(node.key);
 		const elementCopy = { ...element };
 		this._removeNode(node);
-		const targetElement = this._getTreeElement(target.key);
+		const targetElement = this._getTreeElement(target?.key);
 		if (Object.keys(element).length === 0) {
 			targetElement[node.key] = {};
 		} else {
@@ -183,7 +169,10 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 		};
 	}
 
-	_getTreeElement(element: string, tree?: any): Node {
+	_getTreeElement(element: string | undefined, tree?: any): any {
+		if (!element) {
+			return this.tree;
+		}
 		const currentNode = tree ?? this.tree;
 		for (const prop in currentNode) {
 			if (prop === element) {
